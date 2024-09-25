@@ -75,6 +75,13 @@ resource "aws_ecs_service" "ecs_service" {
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
 
+  # load balancing
+  load_balancer {
+    target_group_arn = aws_lb_target_group.alb_target_group.arn
+    container_name   = "${var.project_name}-${var.environment}-container"
+    container_port   = 80
+  }
+  
   # task tagging configuration
   enable_ecs_managed_tags = false
   propagate_tags          = "SERVICE"
@@ -84,12 +91,5 @@ resource "aws_ecs_service" "ecs_service" {
     subnets          = [aws_subnet.private_app_subnet_az1.id, aws_subnet.private_app_subnet_az2.id]
     security_groups  = [aws_security_group.app_server_security_group.id]
     assign_public_ip = false
-  }
-
-  # load balancing
-  load_balancer {
-    target_group_arn = aws_lb_target_group.alb_target_group.arn
-    container_name   = "${var.project_name}-${var.environment}-container"
-    container_port   = 80
   }
 }
