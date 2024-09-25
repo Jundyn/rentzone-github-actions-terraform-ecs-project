@@ -262,4 +262,3 @@ jobs:
           IMAGE_NAME: ${{ needs.deploy_aws_infrastructure.outputs.image_name }}
         run: |
           docker push ${{ secrets.ECR_REGISTRY }}/${{ env.IMAGE_NAME }}
-
